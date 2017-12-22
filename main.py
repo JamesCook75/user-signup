@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template
 import cgi
 import os
+import re
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -10,9 +11,10 @@ def index():
     return render_template('signup.html')
 
 def is_valid_name(name):
-    for char in name:
-        if char == ' ':
-            return 'space'
+    spaces = []
+    spaces = re.findall(' ', name)
+    if len(spaces):
+        return 'space'
     if name == '':
         return 'empty'
     elif len(name) < 3 or len(name) > 20:
@@ -21,24 +23,20 @@ def is_valid_name(name):
         return 'valid'
 
 def is_valid_email(email):
-    at_count = 0
-    dot_count = 0
     name_ok = is_valid_name(email)
     if name_ok == 'empty':
         return True
     elif name_ok == 'space' or name_ok == 'length':
         return False
 
-    for char in email:
-        if char == '@':
-            at_count += 1
-        elif char == '.':
-            dot_count += 1
-    
-    if at_count == 1 and dot_count == 1:
-        return True
+    ats = re.findall('@', email)
+    dots = re.findall('\.', email)
+
+    if len(ats) == 1 and len(dots) == 1:
+        return True 
     else:
-        return False
+        return False   
+
 
 @app.route("/", methods=['GET', 'POST'])
 def validate():
@@ -50,7 +48,6 @@ def validate():
     password_error = ''
     vpassword_error = ''
     email_error = ''
-    general_error = ''
 
     name_test = is_valid_name(name)
     password_test = is_valid_name(password)
