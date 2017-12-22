@@ -58,7 +58,7 @@ def validate():
     email_test = is_valid_email
 
     if name_test == 'empty':
-        name_error = 'Name field must be filled'
+        name_error = 'Name field cannot be empty'
     elif name_test == 'length':
         name_error = 'Name must be between 3 and 20 characters long'
     elif name_test == 'space':
@@ -67,7 +67,7 @@ def validate():
     if password == vpassword:
 
         if password_test == 'empty':
-            password_error = 'Password field must be filled'
+            password_error = 'Password field cannot be empty'
         elif password_test == 'length':
             password_error = 'Password must be between 3 and 20 characters long'
         elif password_test == 'space':
